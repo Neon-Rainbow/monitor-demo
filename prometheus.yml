@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 15s # 默认抓取间隔
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090'] # 抓取 Prometheus 自身
+
+  - job_name: 'etcd'
+    static_configs:
+      - targets: ['etcd:2379'] # 抓取 etcd 服务
+
+  - job_name: 'monitor'
+    static_configs:
+      - targets: ['localhost:8080']
