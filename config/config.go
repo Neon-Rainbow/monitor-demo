@@ -2,9 +2,10 @@ package config
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"sync"
 )
 
 var (
@@ -55,6 +56,9 @@ func initConfig() {
 	// 设置配置文件名
 	viper.SetConfigFile("config.toml")
 
+	// 设置默认配置
+	setDefault()
+
 	// 用于判断配置文件是否被修改
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
@@ -63,16 +67,13 @@ func initConfig() {
 
 	// 读取配置文件
 	if err := viper.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("读取配置文件失败: %s \n", err))
+		panic(fmt.Errorf("读取配置文件失败: %s", err))
 	}
 
 	// 将配置文件内容解析到结构体中
 	if err := viper.Unmarshal(conf); err != nil {
-		panic(fmt.Errorf("读取配置文件失败: %s \n", err))
+		panic(fmt.Errorf("读取配置文件失败: %s", err))
 	}
-
-	return
-
 }
 
 // Get 用于获取配置文件
