@@ -90,7 +90,6 @@ func GinLogger(logger *zap.Logger) gin.HandlerFunc {
 			zap.Any("head", c.Request.Header),
 			zap.String("path", path),
 			zap.String("query", query),
-			zap.String("body", string(bodyBytes)),
 			zap.String("ip", c.ClientIP()),
 			zap.String("user-agent", c.Request.UserAgent()),
 			zap.String("errors", c.Errors.ByType(gin.ErrorTypePrivate).String()),
