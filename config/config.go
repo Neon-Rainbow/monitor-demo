@@ -97,4 +97,7 @@ func setDefault() {
 	viper.SetDefault("logger.level", 0)
 	viper.SetDefault("logger.format", "console")
 	viper.SetDefault("logger.output_path", "./logs/")
+
+	viper.SetDefault("etcd.endpoints", []string{"localhost:2379"})
+	viper.SetDefault("etcd.timeout", 5)
 }
