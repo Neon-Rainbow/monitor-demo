@@ -1,0 +1,14 @@
+[server]
+host = "127.0.0.1" # 服务监听地址
+port = 8080 # 服务监听端口
+mode = "debug" # 运行模式：debug 或 release 或 test
+
+[logger]
+level = -1  # 日志级别：-1 - Debug, 0 - Info, 1 - Warn, 2 - Error, 3 - DPanic, 4 - Panic, 5 - Fatal
+format = "json" # json 或 console
+output_path = "./logs/app.log" # 日志输出路径
+
+[etcd]
+endpoints = ["localhost:2379"] # etcd 服务地址
+timeout = 5 # etcd 连接超时时间, 单位：秒
+
