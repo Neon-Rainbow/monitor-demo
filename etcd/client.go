@@ -1,11 +1,12 @@
 package etcd
 
 import (
-	clientv3 "go.etcd.io/etcd/client/v3"
-	"go.uber.org/zap"
 	"monitor/config"
 	"sync"
 	"time"
+
+	clientv3 "go.etcd.io/etcd/client/v3"
+	"go.uber.org/zap"
 )
 
 var (

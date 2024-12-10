@@ -23,9 +23,10 @@ type Config struct {
 }
 
 type Server struct {
-	Host string `mapstructure:"host"`
-	Port int    `mapstructure:"port"`
-	Mode string `mapstructure:"mode"`
+	Host   string `mapstructure:"host"`
+	Port   int    `mapstructure:"port"`
+	Mode   string `mapstructure:"mode"`
+	Ticker int    `mapstructure:"ticker"`
 }
 
 type Logger struct {
@@ -35,7 +36,7 @@ type Logger struct {
 }
 
 type Prometheus struct {
-	Enable bool
+	// prometheus 的具体配置在 prometheus.yml 文件中
 }
 
 type Etcd struct {
