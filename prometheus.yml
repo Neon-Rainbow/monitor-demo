@@ -12,4 +12,4 @@ scrape_configs:
 
   - job_name: 'monitor'
     static_configs:
-      - targets: ['localhost:8080']
+      - targets: ['host.docker.internal:8080'] # 抓取监控服务
