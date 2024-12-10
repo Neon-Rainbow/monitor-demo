@@ -41,10 +41,9 @@ func newLogger(cfg *config.Logger) (*zap.Logger, error) {
 		5:  zap.FatalLevel,
 	}
 
+	level = zap.InfoLevel
 	if l, ok := logLevelMapper[cfg.Level]; ok {
 		level = l
-	} else {
-		level = zap.InfoLevel
 	}
 
 	// 设置日志格式（JSON 或 Console）
