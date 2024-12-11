@@ -18,4 +18,11 @@ id = "service-1" # 服务 ID, 默认为 service-1
 name = "service" # 服务名称, 默认为 service
 host = "monitor" # 服务地址, 默认为 localhost
 port = 8080 # 服务端口, 默认为 8080
-lease_time = 5 # 服务注册租约时间, 单位：秒, 默认为 5
+lease_time = 5 # etcd 服务注册租约时间, 单位：秒, 默认为 5
+interval = "5s"  # consul 健康检查间隔
+timeout = "3s"   # consul 超时时间
+deregister_after = "1m"  # consul 多久之后注销服务
+
+[consul]
+address = "consul:8500" # consul 服务地址, 默认为 consul:8500
+timeout = 5 # consul 连接超时时间, 单位：秒, 默认为 5

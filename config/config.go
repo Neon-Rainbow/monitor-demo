@@ -46,15 +46,19 @@ type Etcd struct {
 }
 
 type Service struct {
-	ID        string `mapstructure:"id"`
-	Name      string `mapstructure:"name"`
-	Host      string `mapstructure:"host"`
-	Port      int    `mapstructure:"port"`
-	LeaseTime int64  `mapstructure:"lease_time"`
+	ID              string `mapstructure:"id"`
+	Name            string `mapstructure:"name"`
+	Host            string `mapstructure:"host"`
+	Port            int    `mapstructure:"port"`
+	LeaseTime       int64  `mapstructure:"lease_time"`
+	Interval        string `mapstructure:"interval"`
+	Timeout         string `mapstructure:"timeout"`
+	DeregisterAfter string `mapstructure:"deregister_after"`
 }
 
 type Consul struct {
-	Enable bool
+	Address string `mapstructure:"address"`
+	Timeout int    `mapstructure:"timeout"`
 }
 
 type Grafana struct {

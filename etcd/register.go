@@ -22,17 +22,7 @@ var (
 // 用于注册服务时的数据结构
 // 包含了服务ID, 服务地址, 服务端口, 租约时间, 以及路由信息
 type Service struct {
-	// ID 服务ID
-	ID string `json:"id"`
-
-	// Name 服务名称
-	Name string `json:"name"`
-
-	// Host 服务地址
-	Host string `json:"host"`
-
-	// Port 服务端口
-	Port int `json:"port"`
+	domain.ServiceRegistration
 
 	// LeaseTime 租约时间
 	LeaseTime int64 `json:"lease_time"`
@@ -54,10 +44,12 @@ type Service struct {
 //   - routes: 路由信息
 func newService(id, name, host string, port int, leaseTime int64, routes []domain.Route) {
 	service = &Service{
-		ID:        id,
-		Name:      name,
-		Host:      host,
-		Port:      port,
+		ServiceRegistration: domain.ServiceRegistration{
+			ID:   id,
+			Name: name,
+			Host: host,
+			Port: port,
+		},
 		LeaseTime: leaseTime,
 		Routes:    routes,
 	}

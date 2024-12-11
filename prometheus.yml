@@ -12,9 +12,26 @@ scrape_configs:
     static_configs:
       - targets: ['etcd:2379']
 
-  # 动态配置的服务发现
+  # 使用 file_sd_configs 动态配置的服务发现
   - job_name: 'dynamic_services'
     file_sd_configs:
       - files:
           - '/etc/prometheus/file_sd_configs/targets.json'
         refresh_interval: 5s
+  
+  - job_name: 'consul'
+    consul_sd_configs:
+      - server: consul:8500
+        services:
+          - 'service'
+        datacenter: dc1
+        token: consul-token
+        refresh_interval: 5s
+    relabel_configs:
+      - source_labels: ['__meta_consul_service']
+        target_label: 'service_name'
+      - source_labels: ['__meta_consul_service_address','__meta_consul_service_port']
+        separator: ':'
+        regex: '(.+);(\\d+)'
+        replacement: '$1:$2'
+        target_label: '__address__'

@@ -43,6 +43,14 @@ func Route() *gin.Engine {
 		zap.L().Info("ping", zap.String("message", "pong"))
 	})
 
+	// 健康检查
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "ok",
+		})
+		zap.L().Info("health", zap.String("message", "ok"))
+	})
+
 	route = r
 
 	return r
