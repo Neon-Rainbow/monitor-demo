@@ -27,11 +27,3 @@ scrape_configs:
         datacenter: dc1
         token: consul-token
         refresh_interval: 5s
-    relabel_configs:
-      - source_labels: ['__meta_consul_service']
-        target_label: 'service_name'
-      - source_labels: ['__meta_consul_service_address','__meta_consul_service_port']
-        separator: ':'
-        regex: '(.+);(\\d+)'
-        replacement: '$1:$2'
-        target_label: '__address__'
