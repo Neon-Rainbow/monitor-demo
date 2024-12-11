@@ -10,6 +10,12 @@ format = "json" # json 或 console, 默认为 console
 output_path = "./logs/app.log" # 日志输出路径, 默认为 ./logs/app.log
 
 [etcd]
-endpoints = ["localhost:2379"] # etcd 服务地址, 默认为 ["localhost:2379"]
+endpoints = ["etcd:2379"] # etcd 服务地址, 默认为 ["localhost:2379"]
 timeout = 5 # etcd 连接超时时间, 单位：秒, 默认为 5
 
+[service] # 用于服务注册时的配置
+id = "service-1" # 服务 ID, 默认为 service-1
+name = "service" # 服务名称, 默认为 service
+host = "monitor" # 服务地址, 默认为 localhost
+port = 8080 # 服务端口, 默认为 8080
+lease_time = 5 # 服务注册租约时间, 单位：秒, 默认为 5

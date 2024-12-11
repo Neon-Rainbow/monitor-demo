@@ -1,3 +1,26 @@
+# Week3
+
+## 使用 Docker 搭建服务
+首先为项目编写 Dockerfile
+
+```dockerfile
+FROM golang:latest AS builder
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN  go build -o monitor .
+
+CMD ["./monitor"]
+```
+
+编写docker-compose.yml
+
+```yaml
 version: "3.8"
 
 services:
@@ -8,7 +31,6 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_sd:/etc/prometheus/file_sd_configs
     networks:
       - monitoring
     restart: unless-stopped
@@ -65,9 +87,7 @@ services:
     image: monitor-service:latest
     container_name: monitor
     ports:
-      - "8080:8080" 
-    volumes:
-      - prometheus_sd:/etc/prometheus/file_sd_configs 
+      - "8080:8080"
     networks:
       - monitoring
     restart: unless-stopped
@@ -75,6 +95,5 @@ services:
 networks:
   monitoring:
     driver: bridge
+```
 
-volumes:
-  prometheus_sd:

@@ -208,3 +208,126 @@ func NumGoroutine() int
 
 
 
+## ETCD
+
+使用Docker运行ETCD
+
+Docker-compose.yml如下:
+
+```yaml
+etcd:
+    image: bitnami/etcd:latest
+    container_name: etcd
+    environment:
+      - ETCD_NAME=etcd-1
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd:2380
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+      - ETCD_INITIAL_CLUSTER=etcd-1=http://etcd:2380
+      - ETCD_INITIAL_CLUSTER_STATE=new
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - "2379:2379" # 映射 etcd 客户端访问端口
+      - "2380:2380" # 映射 etcd 节点间通信端口
+    restart: unless-stopped
+```
+
+然后定义服务注册时的注册信息:
+
+```json
+{
+    "id":"1",
+    "name":"monitor",
+    "host":"localhost",
+    "port":8080,
+    "lease_time":5,
+    "routes":[
+        {
+            "path":"/metrics",
+            "method":"GET"
+        }
+    ]
+}
+```
+
+其中, `id`, `name`, `host`, `port`, `lease_time`这几个字段的值的配置在[config.toml](../../config.toml)的`service`中, `routes`由`Gin` 框架中的路由配置动态生成服务的路由信息
+
+在项目中定义结构体来注册这样的信息
+
+
+
+定义服务注册时的Key为以下结构:
+
+```
+/service/{name}/{id}
+```
+
+
+
+然后进行服务注册
+
+根据zap日志的输出,可以看到服务注册成功
+
+```json
+{"level":"info","ts":1733883794.6131,"caller":"etcd/register.go:111","msg":"服务注册成功","key":"/service/service/service-1"}
+```
+
+然后我们查看etcd中是否有服务注册的信息:
+
+![](./assets/%E6%88%AA%E5%B1%8F2024-12-11%2010.25.08.png)
+
+可以看到服务注册成功
+
+
+
+然后实现使用ETCD进行服务注册,然后项目定期发现ETCD中注册的服务,然后将信息保存到`/etc/prometheus/file_sd_configs/targets.json`,然后prometheus.yml中进行如下配置:
+
+```yaml
+global:
+  scrape_interval: 15s # 全局抓取间隔
+
+scrape_configs:
+  # Prometheus 自身的监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  # 监控 ETCD 的状态
+  - job_name: 'etcd'
+    static_configs:
+      - targets: ['etcd:2379']
+
+  # 动态配置的服务发现
+  - job_name: 'dynamic_services'
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/targets.json'
+        refresh_interval: 5s
+```
+
+进行动态的服务发现,每5s读取`/etc/prometheus/file_sd_configs/targets.json`
+
+其中`/etc/prometheus/file_sd_configs/targets.json`内容如下:
+
+![](./assets/%E6%88%AA%E5%B1%8F2024-12-11%2014.40.55.png)
+
+由于项目使用了Docker,因此各个容器之间使用 bridge 网络,这样 Docker 会为同一网络中的容器自动分配内部 DNS 和 IP 地址,因此在monitor这个项目进行服务注册时,可以直接将host设置为`monitor`,具体的ip由docker分配
+
+
+
+首先制作monitor项目的镜像,然后使用docker-compose来启动项目
+
+
+
+启动后,访问[http://localhost:9090/targets](http://localhost:9090/targets)
+
+![](./assets/%E6%88%AA%E5%B1%8F2024-12-11%2014.37.38.png)
+
+然后查询项目的指标
+
+![](./assets/%E6%88%AA%E5%B1%8F2024-12-11%2014.38.24.png)
+
+![](./assets/%E6%88%AA%E5%B1%8F2024-12-11%2014.38.55.png)
+
+可以看到各指标可以被正确查询

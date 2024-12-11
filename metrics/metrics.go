@@ -5,6 +5,7 @@ import (
 )
 
 // metrics 指标
+// 其中包含了CPU使用率, 内存使用率, goroutine数量, 进程数量, 自定义计数器
 type metrics struct {
 	// cpuUsageGauge CPU使用率
 	cpuUsageGauge *prometheus.GaugeVec

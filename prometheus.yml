@@ -1,15 +1,20 @@
 global:
-  scrape_interval: 15s # 默认抓取间隔
+  scrape_interval: 15s # 全局抓取间隔
 
 scrape_configs:
+  # Prometheus 自身的监控
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090'] # 抓取 Prometheus 自身
+      - targets: ['prometheus:9090']
 
+  # 监控 ETCD 的状态
   - job_name: 'etcd'
     static_configs:
-      - targets: ['etcd:2379'] # 抓取 etcd 服务
+      - targets: ['etcd:2379']
 
-  - job_name: 'monitor'
-    static_configs:
-      - targets: ['host.docker.internal:8080'] # 抓取监控服务
+  # 动态配置的服务发现
+  - job_name: 'dynamic_services'
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/targets.json'
+        refresh_interval: 5s

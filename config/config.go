@@ -17,6 +17,7 @@ type Config struct {
 	Server     *Server
 	Logger     *Logger
 	Prometheus *Prometheus
+	Service    *Service
 	Etcd       *Etcd
 	Consul     *Consul
 	Grafana    *Grafana
@@ -42,6 +43,14 @@ type Prometheus struct {
 type Etcd struct {
 	Endpoints []string `mapstructure:"endpoints"`
 	Timeout   int      `mapstructure:"timeout"`
+}
+
+type Service struct {
+	ID        string `mapstructure:"id"`
+	Name      string `mapstructure:"name"`
+	Host      string `mapstructure:"host"`
+	Port      int    `mapstructure:"port"`
+	LeaseTime int64  `mapstructure:"lease_time"`
 }
 
 type Consul struct {
@@ -89,6 +98,7 @@ func Get() *Config {
 	return conf
 }
 
+// setDefault 用于设置默认配置
 func setDefault() {
 	viper.SetDefault("server.host", "127.0.0.1")
 	viper.SetDefault("server.port", 8080)
@@ -101,4 +111,10 @@ func setDefault() {
 
 	viper.SetDefault("etcd.endpoints", []string{"localhost:2379"})
 	viper.SetDefault("etcd.timeout", 5)
+
+	viper.SetDefault("service.id", "1")
+	viper.SetDefault("service.name", "monitor")
+	viper.SetDefault("service.host", "localhost")
+	viper.SetDefault("service.port", 8080)
+	viper.SetDefault("service.lease_time", 5)
 }
