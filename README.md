@@ -25,7 +25,7 @@ docker-compose up -d
 
 可以访问[http://localhost:9090/query](http://localhost:9090/query) 来通过 prometheus 查看项目数据
 
-其中每个指标的 `instance` 字段分别有`job="service"` 以及 `job="consul"` 两种
+其中每个指标的 `job` 字段分别有`job="service"` 以及 `job="consul"` 两种
 
 service表明prometheus通过项目在etcd中注册的服务进行的服务发现,consul表明prometheus通过项目在consul中注册的服务进行的服务发现
 
