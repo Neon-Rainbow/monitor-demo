@@ -31,8 +31,6 @@ service表明prometheus通过项目在etcd中注册的服务进行的服务发�
 
 同时可以访问[http://localhost:3000/](http://localhost:3000/) 来通过 Grafana 提供更全面的图形化界面,初始用户名为`admin`,初始密码为`admin`
 
-在添加Data Source 时选择 prometheus, 如果项目是根据上面的`docker-compose.yml`的方式启动的, 且未修改配置文件, 那么 Connection 中的 Url 中请填写
-```
-http://prometheus:9090
-```
-否则请自己根据修改的配置进行填写
+默认已经添加了 prometheus 的数据源
+
+如果项目修改了配置文件, 那么请根据实际的 prometheus 的地址来添加数据源

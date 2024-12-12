@@ -21,6 +21,8 @@ services:
     networks:
       - monitoring
     restart: unless-stopped
+    volumes:
+      - ./datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
