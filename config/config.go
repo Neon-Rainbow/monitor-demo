@@ -1,6 +1,7 @@
 package config
 
 import (
+	"flag"
 	"fmt"
 	"sync"
 
@@ -66,9 +67,9 @@ type Grafana struct {
 }
 
 // initConfig 用于初始化配置文件
-func initConfig() {
+func initConfig(cfgPath string) {
 	// 设置配置文件名
-	viper.SetConfigFile("config.toml")
+	viper.SetConfigFile(cfgPath)
 
 	// 设置默认配置
 	setDefault()
@@ -97,7 +98,12 @@ func initConfig() {
 //   - *Config: 配置文件结构体指针
 func Get() *Config {
 	once.Do(func() {
-		initConfig()
+		cfgPath := flag.String("config", "", "配置文件路径")
+		flag.Parse()
+		if cfgPath == nil {
+			panic("请指定配置文件路径")
+		}
+		initConfig(*cfgPath)
 	})
 	return conf
 }

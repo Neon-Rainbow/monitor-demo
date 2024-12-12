@@ -2,7 +2,6 @@ package route
 
 import (
 	"monitor/config"
-	"monitor/domain"
 	"monitor/logger"
 	"monitor/middleware"
 
@@ -13,7 +12,7 @@ import (
 
 var route *gin.Engine
 
-// Route 用于定义路由
+// Route 用于初始化路由
 func Route() *gin.Engine {
 	r := gin.New()
 
@@ -57,18 +56,18 @@ func Route() *gin.Engine {
 }
 
 // ExtractRoutes 用于提取路由信息
-// 该函数会提取所有路由信息, 并返回一个 Route 数组
+// 该函数会提取所有路由信息, 并返回一个 Info 数组
 //
 // 参数:
 //   - router: *gin.Engine: gin.Engine 指针
 //
 // 返回值:
-//   - []domain.Route: Route 数组
-func ExtractRoutes() []domain.Route {
-	var routes []domain.Route
+//   - []domain.Info: Info 数组
+func ExtractRoutes() []Info {
+	var routes []Info
 
 	for _, r := range route.Routes() {
-		routes = append(routes, domain.Route{
+		routes = append(routes, Info{
 			Path:   r.Path,
 			Method: r.Method,
 		})

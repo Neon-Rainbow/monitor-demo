@@ -2,6 +2,7 @@ package logger
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"monitor/config"
 	"net"
@@ -20,8 +21,15 @@ import (
 
 // newLogger 创建并初始化zap日志库
 func newLogger(cfg *config.Logger) (*zap.Logger, error) {
+	// 创建日志文件的路径
+	err := os.MkdirAll(cfg.OutputPath, os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+
 	// 创建日志文件
-	logFile, err := os.Create(cfg.OutputPath)
+
+	logFile, err := os.Create(fmt.Sprintf("%s/%s.log", cfg.OutputPath, time.Now().Format("2006-01-02 15:04:05")))
 	if err != nil {
 		return nil, err
 	}

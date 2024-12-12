@@ -28,8 +28,11 @@ func (m *metrics) AutoUpdateMetrics() {
 	go func() {
 		ticker := time.NewTicker(time.Duration(config.Get().Server.Ticker) * time.Second)
 		defer ticker.Stop()
-		for range ticker.C {
-			m.update()
+		for {
+			select {
+			case <-ticker.C:
+				m.update()
+			}
 		}
 	}()
 }

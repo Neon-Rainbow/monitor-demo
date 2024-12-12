@@ -28,7 +28,7 @@ type Service struct {
 	LeaseTime int64 `json:"lease_time"`
 
 	// Routes 路由信息
-	Routes []domain.Route `json:"routes"`
+	Routes []route.Info `json:"routes"`
 }
 
 // newService 用于创建服务实例
@@ -42,7 +42,7 @@ type Service struct {
 //   - port: 服务端口
 //   - leaseTime: 租约时间
 //   - routes: 路由信息
-func newService(id, name, host string, port int, leaseTime int64, routes []domain.Route) {
+func newService(id, name, host string, port int, leaseTime int64, routes []route.Info) {
 	service = &Service{
 		ServiceRegistration: domain.ServiceRegistration{
 			ID:   id,
